@@ -1,0 +1,25 @@
+{
+  "name": "nft-ipfs-grabber",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "account": "npx tsx src/account.ts",
+    "collection": "npx tsx src/collection.ts",
+    "prettier": "prettier -w ."
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@wharfkit/atomicassets": "^1.2.1",
+    "is-ipfs": "^8.0.4",
+    "multiformats": "^13.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.1",
+    "prettier": "^3.3.3",
+    "tsx": "^4.18.0",
+    "typescript": "^5.5.4"
+  }
+}
