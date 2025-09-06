@@ -15,5 +15,5 @@ export const getIPFSHash = (path: string): string | void => {
 
   // https://ipfs.io/ipfs/QmYjtig7VJQ6XsnUjqqJvj7QaMcCAwtrgNdahSiFofrE7o
   if (isIPFS.url(path))
-    return path.replace(/.*?(Qm|bafy)/, '$1').split(/[/?#&]/)[0];
+    return path.replace(/.*?(Qm|baf)/, '$1').split(/[/?#&]/)[0];
 };

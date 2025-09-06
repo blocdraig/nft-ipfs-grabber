@@ -8,6 +8,7 @@ interface IArgs {
   schemas?: string;
   templates?: string;
   assets?: string;
+  kubo?: string;
 }
 
 // get and check script arguments
@@ -29,7 +30,7 @@ if (!scriptArgs.collection) {
 }
 
 if (!scriptArgs.api) {
-  scriptArgs.api = 'https://wax.api.atomicassets.io';
+  scriptArgs.api = 'https://atomic-wax-mainnet.wecan.dev';
 }
 
 let schemas: string[] = [];
@@ -91,11 +92,11 @@ const run = async () => {
           ipfsHashesPerSchema[schemaName].push(ipfsHash);
         }
       } else {
-        // debug: if asset.data[key] includes 'Qm' or 'bafy' but is not a valid IPFS hash, log it
+        // debug: if asset.data[key] includes 'Qm' or 'baf' but is not a valid IPFS hash, log it
         if (typeof asset.data[key] == 'string') {
           if (
             asset.data[key].includes('Qm') ||
-            asset.data[key].includes('bafy')
+            asset.data[key].includes('baf')
           ) {
             console.log(`Invalid IPFS hash: ${asset.data[key]}`);
           }
@@ -144,6 +145,16 @@ const run = async () => {
   // save all IPFS hashes to a file
   const fileName = `${savePath}/${collectionName}/${collectionName}.csv`;
   fs.writeFileSync(fileName, ipfsHashes.join('\n'));
+
+  // load existing hashes from `pinning.csv`, prepend new hashes to it, deduplicate and save to `pinning.csv`
+  const pinningCsv = `${basePath}/pinning.csv`;
+  if (fs.existsSync(pinningCsv)) {
+    const existingHashes = fs.readFileSync(pinningCsv, 'utf8').split('\n');
+    const newHashes = ipfsHashes.filter((hash) => !existingHashes.includes(hash));
+    fs.writeFileSync(pinningCsv, [...newHashes, ...existingHashes].join('\n'));
+  } else {
+    fs.writeFileSync(pinningCsv, ipfsHashes.join('\n'));
+  }
 };
 
 run().then();
