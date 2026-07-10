@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { CID, create, KuboRPCClient } from 'kubo-rpc-client';
+import { isAbortError, parseCliArgs } from './lib/cli.js';
 
 interface IArgs {
   url?: string;
@@ -12,11 +13,7 @@ if (args.length === 0) {
   process.exit(1);
 }
 
-const scriptArgs: IArgs = args.reduce((acc: any, arg) => {
-  const [key, value] = arg.split('=');
-  acc[key.slice(2)] = value;
-  return acc;
-}, {});
+const scriptArgs = parseCliArgs<IArgs>(args);
 
 let url: string = '';
 if (scriptArgs.url) {
@@ -49,7 +46,7 @@ const run = async () => {
 
   if (ipfsClient) {
     console.log(`Pinning ${ipfsHashes.length} hashes to Kubo`);
-    let successHashes: string[] = [];
+    const successHashes: string[] = [];
     let failedHashes: string[] = [];
     let count = 0;
     for (const hash of ipfsHashes) {
@@ -58,16 +55,21 @@ const run = async () => {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 5000); // 5 seconds
       try {
-        const res = await ipfsClient.pin.add(CID.parse(hash), { recursive: true, signal: controller.signal });
+        const res = await ipfsClient.pin.add(CID.parse(hash), {
+          recursive: true,
+          signal: controller.signal,
+        });
         if (res) {
           successHashes.push(hash.toString());
           // remove successHashes from ipfsHashes
-          const remainingHashes = ipfsHashes.filter((h) => !successHashes.includes(h));
+          const remainingHashes = ipfsHashes.filter(
+            (h) => !successHashes.includes(h)
+          );
           fs.writeFileSync(pinningCsv, remainingHashes.join('\n'));
           continue;
         }
-      } catch (err: any) {
-        if (err.name === 'AbortError') {
+      } catch (err: unknown) {
+        if (isAbortError(err)) {
           console.warn(`Pinning timed out for ${hash}, skipping...`);
         } else {
           console.error(`Error pinning ${hash}:`, err);
@@ -87,16 +89,20 @@ const run = async () => {
         count++;
         console.log(`${count}/${ipfsHashesNew.length} - Pinning ${hash}`);
         try {
-          const res = await ipfsClient.pin.add(CID.parse(hash), { recursive: true });
+          const res = await ipfsClient.pin.add(CID.parse(hash), {
+            recursive: true,
+          });
           if (res) {
             successHashes.push(hash.toString());
             // remove successHashes from ipfsHashes
-            const remainingHashes = ipfsHashesNew.filter((h) => !successHashes.includes(h));
+            const remainingHashes = ipfsHashesNew.filter(
+              (h) => !successHashes.includes(h)
+            );
             fs.writeFileSync(pinningCsv, remainingHashes.join('\n'));
             continue;
           }
-        } catch (err: any) {
-          if (err.name === 'AbortError') {
+        } catch (err: unknown) {
+          if (isAbortError(err)) {
             console.warn(`Pinning timed out for ${hash}, skipping...`);
           } else {
             console.error(`Error pinning ${hash}:`, err);

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { getIPFSHash } from './lib/ipfs.js';
 import Atomic from './lib/atomicassets.js';
+import { parseCliArgs } from './lib/cli.js';
 
 interface IArgs {
   api?: string;
@@ -18,11 +19,7 @@ if (args.length === 0) {
   process.exit(1);
 }
 
-const scriptArgs: IArgs = args.reduce((acc: any, arg) => {
-  const [key, value] = arg.split('=');
-  acc[key.slice(2)] = value;
-  return acc;
-}, {});
+const scriptArgs = parseCliArgs<IArgs>(args);
 
 if (!scriptArgs.collection) {
   console.error('No collection provided');
@@ -30,7 +27,7 @@ if (!scriptArgs.collection) {
 }
 
 if (!scriptArgs.api) {
-  scriptArgs.api = 'https://atomic-wax-mainnet.wecan.dev';
+  scriptArgs.api = 'https://wax.api.atomicassets.io';
 }
 
 let schemas: string[] = [];
@@ -150,7 +147,9 @@ const run = async () => {
   const pinningCsv = `${basePath}/pinning.csv`;
   if (fs.existsSync(pinningCsv)) {
     const existingHashes = fs.readFileSync(pinningCsv, 'utf8').split('\n');
-    const newHashes = ipfsHashes.filter((hash) => !existingHashes.includes(hash));
+    const newHashes = ipfsHashes.filter(
+      (hash) => !existingHashes.includes(hash)
+    );
     fs.writeFileSync(pinningCsv, [...newHashes, ...existingHashes].join('\n'));
   } else {
     fs.writeFileSync(pinningCsv, ipfsHashes.join('\n'));

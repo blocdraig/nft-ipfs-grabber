@@ -1,6 +1,10 @@
 import { AtomicAssetsAPIClient, Types } from '@wharfkit/atomicassets';
 import { APIClient } from '@wharfkit/antelope';
 
+type GetAssetsOptions = NonNullable<
+  Parameters<AtomicAssetsAPIClient['atomicassets']['v1']['get_assets']>[0]
+>;
+
 class Atomic {
   client: AtomicAssetsAPIClient;
 
@@ -8,9 +12,9 @@ class Atomic {
     this.client = new AtomicAssetsAPIClient(new APIClient({ url }));
   }
 
-  async getAssets(options: any) {
+  async getAssets(options: GetAssetsOptions) {
     let assets: Types.AssetObject[] = [];
-    let limit = 1000;
+    const limit = 1000;
     let page = 1;
 
     const countRes =
@@ -57,9 +61,9 @@ class Atomic {
     assetIds: string[]
   ) {
     return this.getAssets({
-      collection_name: collection,
-      templates: templates,
-      schemas: schemas,
+      collection_name: [collection],
+      schema_name: schemas,
+      template_id: templates,
       ids: assetIds,
     });
   }

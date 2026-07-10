@@ -1,27 +1,34 @@
 {
   "name": "nft-ipfs-grabber",
-  "private": true,
   "version": "1.0.0",
+  "license": "MIT",
   "type": "module",
   "scripts": {
-    "account": "npx tsx src/account.ts",
-    "collection": "npx tsx src/collection.ts",
-    "kubo": "npx tsx src/kubo.ts",
-    "prettier": "prettier -w ."
+    "account": "tsx src/account.ts",
+    "collection": "tsx src/collection.ts",
+    "kubo": "tsx src/kubo.ts",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit"
   },
   "engines": {
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@wharfkit/atomicassets": "^1.2.3",
-    "is-ipfs": "^8.0.4",
-    "kubo-rpc-client": "^5.2.0",
-    "multiformats": "^13.4.0"
+    "@wharfkit/atomicassets": "1.2.4",
+    "is-ipfs": "8.0.4",
+    "kubo-rpc-client": "7.1.0"
   },
   "devDependencies": {
-    "@types/node": "^24.3.1",
-    "prettier": "^3.6.2",
-    "tsx": "^4.20.5",
-    "typescript": "~5.9"
+    "@eslint/js": "10.0.1",
+    "@types/node": "26.1.1",
+    "eslint": "10.6.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.7.0",
+    "prettier": "3.9.4",
+    "tsx": "4.23.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.62.1"
   }
 }
