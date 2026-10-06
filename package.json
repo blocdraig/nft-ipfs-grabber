@@ -15,23 +15,24 @@
     "test:watch": "vitest"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
   },
   "dependencies": {
-    "@wharfkit/atomicassets": "1.2.4",
+    "@wharfkit/antelope": "4.0.2",
+    "@wharfkit/atomicassets": "4.0.2",
     "is-ipfs": "8.0.4",
     "kubo-rpc-client": "7.1.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@types/node": "26.1.1",
-    "eslint": "10.6.0",
+    "@types/node": "26.6.4",
+    "eslint": "10.12.0",
     "eslint-config-prettier": "10.1.8",
-    "globals": "17.7.0",
-    "prettier": "3.9.4",
-    "tsx": "4.23.0",
-    "typescript": "5.9.3",
-    "typescript-eslint": "8.62.1",
+    "globals": "17.13.0",
+    "prettier": "3.9.9",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1",
     "vite": "8.3.3",
     "vitest": "5.0.3"
   }
