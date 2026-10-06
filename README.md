@@ -4,15 +4,11 @@ This script will grab all the IPFS hashes from Atomic Assets NFTs owned by a acc
 
 ## Usage
 
-First install the required packages with `yarn install` or `npm install`.
+First install the required packages with `npm install`.
 
 ### Grabbing all IPFS hashes for an account
 
-To grab all IPFS hashes for an account, run one of the following commands depending on your package manager:
-
-```bash
-yarn run account --account=<account_name>
-```
+To grab all IPFS hashes for an account, run:
 
 ```bash
 npm run account -- --account=<account_name>
@@ -21,30 +17,18 @@ npm run account -- --account=<account_name>
 Optionally, you can specify collections, and asset IDs to filter the results:
 
 ```bash
-yarn run account --account=<account_name> --collections=<collection_name1>,<collection_name2> --assets=<asset_id1>,<asset_id2>,...
-```
-
-```bash
 npm run account -- --account=<account_name> --collections=<collection_name1>,<collection_name2> --assets=<asset_id1>,<asset_id2>,...
 ```
 
 ### Grabbing all IPFS hashes for a collection
 
-To grab all IPFS hashes for a collection, run one of the following commands depending on your package manager:
-
-```bash
-yarn run collection --collection=<collection_name>
-```
+To grab all IPFS hashes for a collection, run:
 
 ```bash
 npm run collection -- --collection=<collection_name>
 ```
 
 Optionally, you can specify schemas, templates, and asset IDs to filter the results:
-
-```bash
-yarn run collection --collection=<collection_name> --schemas=<schema_name1>,<schema_name2> --templates=<template_id1>,<template_id2> --assets=<asset_id1>,<asset_id2>,...
-```
 
 ```bash
 npm run collection -- --collection=<collection_name> --schemas=<schema_name1>,<schema_name2> --templates=<template_id1>,<template_id2> --assets=<asset_id1>,<asset_id2>,...
@@ -66,10 +50,6 @@ The pinning functionality allows you to pin IPFS hashes to your local Kubo node.
 2. Attempts to pin each hash to your Kubo node
 3. Removes successfully pinned hashes from the CSV
 4. Keeps failed hashes in the CSV for retry
-
-```bash
-yarn run kubo --url=http://localhost:5001
-```
 
 ```bash
 npm run kubo -- --url=http://localhost:5001
